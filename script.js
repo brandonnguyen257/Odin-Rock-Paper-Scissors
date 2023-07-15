@@ -13,6 +13,13 @@ const ROUND_DECISION = {
     TIE: 'tie'
 }
 
+//initialization
+const humanScoreElement = document.getElementById('human-score');
+
+function updateHumanScoreElement() {
+    humanScoreElement.textContent = humanScore;
+}
+
 const rockButton = document.getElementById("rock-button");
 const paperButton = document.getElementById('paper-button');
 const scissorsButton = document.getElementById('scissors-button');
@@ -21,14 +28,15 @@ rockButton.addEventListener('click', () => playRound(GAME_OPTIONS.ROCK));
 paperButton.addEventListener('click', () => playRound(GAME_OPTIONS.PAPER));
 scissorsButton.addEventListener('click', () => playRound(GAME_OPTIONS.SCISSORS));
 
+updateHumanScoreElement();
 
 function playRound(humanInput) {
     const computerInput = getComputerGameInput();
     const roundDecision = getRoundDecision(humanInput, computerInput);
     processRoundDecision(roundDecision);
+    updateHumanScoreElement();
     console.log(humanInput, computerInput, roundDecision);
     console.log(humanScore, computerScore);
-
 }
 
 function getComputerGameInput() {
