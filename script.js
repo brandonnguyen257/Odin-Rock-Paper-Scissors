@@ -69,8 +69,8 @@ function playRound(humanInput) {
     updatePlayerDecisionElements(humanInput, computerInput);
     const roundDecision = getRoundDecision(humanInput, computerInput);
     processRoundDecision(roundDecision, humanInput, computerInput);
-    console.log(humanInput, computerInput, roundDecision);
-    console.log(humanScore, computerScore);
+    // console.log(humanInput, computerInput, roundDecision);
+    // console.log(humanScore, computerScore);
 }
 
 function getComputerGameInput() {
@@ -89,37 +89,47 @@ function getComputerGameInput() {
 }
 
 function getRoundDecision(humanInput, computerInput) {
-    if (humanInput === computerInput) return ROUND_DECISION.TIE;
-
-    if(humanInput === GAME_OPTIONS.ROCK) {
-        return computerInput === GAME_OPTIONS.SCISSORS ? 
-        ROUND_DECISION.HUMAN_WIN : ROUND_DECISION.COMPUTER_WIN;
-    }
-
-    if(humanInput === GAME_OPTIONS.PAPER) {
-        return computerInput === GAME_OPTIONS.ROCK ? 
-        ROUND_DECISION.HUMAN_WIN : ROUND_DECISION.COMPUTER_WIN;
-    }
-
-    if(humanInput === GAME_OPTIONS.SCISSORS) {
-        return computerInput === GAME_OPTIONS.PAPER ? 
-        ROUND_DECISION.HUMAN_WIN : ROUND_DECISION.COMPUTER_WIN;
-    }
+    const outcomes = {
+        [GAME_OPTIONS.ROCK]: 
+        {
+            [GAME_OPTIONS.ROCK]: ROUND_DECISION.TIE,
+            [GAME_OPTIONS.PAPER]: ROUND_DECISION.COMPUTER_WIN,
+            [GAME_OPTIONS.SCISSORS]: ROUND_DECISION.HUMAN_WIN,
+        },
+        [GAME_OPTIONS.PAPER]: 
+        {
+            [GAME_OPTIONS.ROCK]: ROUND_DECISION.HUMAN_WIN,
+            [GAME_OPTIONS.PAPER]: ROUND_DECISION.TIE,
+            [GAME_OPTIONS.SCISSORS]: ROUND_DECISION.COMPUTER_WIN,
+        },
+        [GAME_OPTIONS.SCISSORS]: 
+        {
+            [GAME_OPTIONS.ROCK]: ROUND_DECISION.COMPUTER_WIN,
+            [GAME_OPTIONS.PAPER]: ROUND_DECISION.HUMAN_WIN,
+            [GAME_OPTIONS.SCISSORS]: ROUND_DECISION.TIE,
+        },
+    };
+    return outcomes[humanInput][computerInput];
 }
 
 function processRoundDecision(roundDecision, humanInput, computerInput) {
+    const roundMessages = {
+        [ROUND_DECISION.HUMAN_WIN]: `Human Win, ${humanInput} beats ${computerInput}`,
+        [ROUND_DECISION.COMPUTER_WIN]: `Computer Win, ${computerInput} beats ${humanInput}`,
+        [ROUND_DECISION.TIE]: `Tie, both players chose ${humanInput}`,
+    }
+
     switch (roundDecision) {
         case ROUND_DECISION.HUMAN_WIN:
             humanScore+=1;
-            roundDecisionElement.textContent = `Human Win, ${humanInput} beats ${computerInput}`;
             break;
         case ROUND_DECISION.COMPUTER_WIN:
             computerScore+=1;
-            roundDecisionElement.textContent = `Computer Win, ${computerInput} beats ${humanInput}`;
             break;
         default:
-            roundDecisionElement.textContent = `Tie, both players chose ${humanInput}`;
+            break;
     }
+    roundDecisionElement.textContent = roundMessages[roundDecision];
     updateScoreElements();
 
     if (humanScore === GAME_WIN_SCORE || computerScore === GAME_WIN_SCORE) {
