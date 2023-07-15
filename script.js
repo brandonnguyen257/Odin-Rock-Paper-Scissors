@@ -134,10 +134,12 @@ function processRoundDecision(roundDecision, humanInput, computerInput) {
 
     if (humanScore === GAME_WIN_SCORE || computerScore === GAME_WIN_SCORE) {
         gameDoneModal.classList.add('show');
+        setDisableGameButtons(true);
     }
 }
 
 function restartGame() {
+    setDisableGameButtons(false);
     humanScore = 0;
     computerScore = 0;
     updateScoreElements();
@@ -147,4 +149,10 @@ function restartGame() {
     computerDecisionElement.textContent = '';
 
     gameDoneModal.classList.remove('show');
+}
+
+function setDisableGameButtons(buttonState) {
+    rockButton.disabled = buttonState;
+    paperButton.disabled = buttonState;
+    scissorsButton.disabled = buttonState;
 }
