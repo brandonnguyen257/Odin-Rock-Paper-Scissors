@@ -2,18 +2,20 @@ let humanScore = 0;
 let computerScore = 0;
 
 const GAME_OPTIONS = {
-    ROCK: 'rock',
-    PAPER: 'paper',
-    SCISSORS: 'scissors'
+    ROCK: 'Rock',
+    PAPER: 'Paper',
+    SCISSORS: 'Scissors'
 }
 
 const ROUND_DECISION = {
-    HUMAN_WIN: 'human',
-    COMPUTER_WIN: 'computer',
-    TIE: 'tie'
+    HUMAN_WIN: 'Human',
+    COMPUTER_WIN: 'Computer',
+    TIE: 'Tie'
 }
 
-//initialize elements in .js
+//initialize DOM manipulation elements
+
+//Get DOM score elements
 const humanScoreElement = document.getElementById('human-score');
 function updateHumanScoreElement() {
     humanScoreElement.textContent = humanScore;
@@ -29,23 +31,26 @@ function updateScoreElements() {
     updateComputerScoreElement();
 }
 
-const rockButton = document.getElementById("rock-button");
-const paperButton = document.getElementById('paper-button');
-const scissorsButton = document.getElementById('scissors-button');
+const roundDecisionElement = document.getElementById('round-decision');
 
+//Get DOM Game Option elements
+const rockButton = document.getElementById("rock-button");
 rockButton.addEventListener('click', () => playRound(GAME_OPTIONS.ROCK));
+
+const paperButton = document.getElementById('paper-button');
 paperButton.addEventListener('click', () => playRound(GAME_OPTIONS.PAPER));
+
+const scissorsButton = document.getElementById('scissors-button');
 scissorsButton.addEventListener('click', () => playRound(GAME_OPTIONS.SCISSORS));
 
 //initialize UI elements with default values
-updateHumanScoreElement();
-updateComputerScoreElement();
+updateScoreElements();
 
 //main method to run
 function playRound(humanInput) {
     const computerInput = getComputerGameInput();
     const roundDecision = getRoundDecision(humanInput, computerInput);
-    processRoundDecision(roundDecision);
+    processRoundDecision(roundDecision, humanInput, computerInput);
     updateScoreElements();
     console.log(humanInput, computerInput, roundDecision);
     console.log(humanScore, computerScore);
@@ -85,15 +90,17 @@ function getRoundDecision(humanInput, computerInput) {
     }
 }
 
-function processRoundDecision(roundDecision) {
+function processRoundDecision(roundDecision, humanInput, computerInput) {
     switch (roundDecision) {
         case ROUND_DECISION.HUMAN_WIN:
             humanScore+=1;
+            roundDecisionElement.textContent = `Human Win, ${humanInput} beats ${computerInput}`;
             break;
         case ROUND_DECISION.COMPUTER_WIN:
             computerScore+=1;
+            roundDecisionElement.textContent = `Computer Win, ${computerInput} beats ${humanInput}`;
             break;
         default:
-            console.log('Tie Switch Case');
+            roundDecisionElement.textContent = `Tie, both players chose ${humanInput}`;
     }
 }
