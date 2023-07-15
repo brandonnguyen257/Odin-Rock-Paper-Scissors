@@ -1,6 +1,8 @@
+//Scores
 let humanScore = 0;
 let computerScore = 0;
 
+//Game Enums
 const GAME_OPTIONS = {
     ROCK: 'Rock',
     PAPER: 'Paper',
@@ -13,15 +15,37 @@ const ROUND_DECISION = {
     TIE: 'Tie'
 }
 
+const GAME_WIN_SCORE = 5;
+
 //initialize DOM manipulation elements
 
-//Get DOM score elements
+//DOM elements
 const humanScoreElement = document.getElementById('human-score');
+const computerScoreElement = document.getElementById('computer-score');
+
+const roundDecisionElement = document.getElementById('round-decision');
+const humanDecisionElement = document.getElementById('human-decision');
+const computerDecisionElement = document.getElementById('computer-decision');
+
+const gameDoneModal = document.getElementById('game-done-modal');
+const restartGameButton = document.getElementById('restart-game-button');
+
+const rockButton = document.getElementById("rock-button");
+const paperButton = document.getElementById('paper-button');
+const scissorsButton = document.getElementById('scissors-button');
+
+//Event Listeners
+rockButton.addEventListener('click', () => playRound(GAME_OPTIONS.ROCK));
+paperButton.addEventListener('click', () => playRound(GAME_OPTIONS.PAPER));
+scissorsButton.addEventListener('click', () => playRound(GAME_OPTIONS.SCISSORS));
+
+restartGameButton.addEventListener('click', () => restartGame());
+
+//Update DOM Element Methods
 function updateHumanScoreElement() {
     humanScoreElement.textContent = humanScore;
 }
 
-const computerScoreElement = document.getElementById('computer-score');
 function updateComputerScoreElement() {
     computerScoreElement.textContent = computerScore;
 }
@@ -31,27 +55,12 @@ function updateScoreElements() {
     updateComputerScoreElement();
 }
 
-const roundDecisionElement = document.getElementById('round-decision');
-
-const humanDecisionElement = document.getElementById('human-decision');
-const computerDecisionElement = document.getElementById('computer-decision');
-
 function updatePlayerDecisionElements(humanInput, computerInput){
     humanDecisionElement.textContent = humanInput;
     computerDecisionElement.textContent = computerInput;
 }
 
-//Get DOM Game Option elements
-const rockButton = document.getElementById("rock-button");
-rockButton.addEventListener('click', () => playRound(GAME_OPTIONS.ROCK));
-
-const paperButton = document.getElementById('paper-button');
-paperButton.addEventListener('click', () => playRound(GAME_OPTIONS.PAPER));
-
-const scissorsButton = document.getElementById('scissors-button');
-scissorsButton.addEventListener('click', () => playRound(GAME_OPTIONS.SCISSORS));
-
-//initialize UI elements with default values
+//DOM initialization
 updateScoreElements();
 
 //main method to run
@@ -60,7 +69,6 @@ function playRound(humanInput) {
     updatePlayerDecisionElements(humanInput, computerInput);
     const roundDecision = getRoundDecision(humanInput, computerInput);
     processRoundDecision(roundDecision, humanInput, computerInput);
-    updateScoreElements();
     console.log(humanInput, computerInput, roundDecision);
     console.log(humanScore, computerScore);
 }
@@ -112,4 +120,21 @@ function processRoundDecision(roundDecision, humanInput, computerInput) {
         default:
             roundDecisionElement.textContent = `Tie, both players chose ${humanInput}`;
     }
+    updateScoreElements();
+
+    if (humanScore === GAME_WIN_SCORE || computerScore === GAME_WIN_SCORE) {
+        gameDoneModal.classList.add('show');
+    }
+}
+
+function restartGame() {
+    humanScore = 0;
+    computerScore = 0;
+    updateScoreElements();
+
+    roundDecisionElement.textContent = '';
+    humanDecisionElement.textContent = '';
+    computerDecisionElement.textContent = '';
+
+    gameDoneModal.classList.remove('show');
 }
