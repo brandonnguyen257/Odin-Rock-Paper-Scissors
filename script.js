@@ -33,6 +33,14 @@ function updateScoreElements() {
 
 const roundDecisionElement = document.getElementById('round-decision');
 
+const humanDecisionElement = document.getElementById('human-decision');
+const computerDecisionElement = document.getElementById('computer-decision');
+
+function updatePlayerDecisionElements(humanInput, computerInput){
+    humanDecisionElement.textContent = humanInput;
+    computerDecisionElement.textContent = computerInput;
+}
+
 //Get DOM Game Option elements
 const rockButton = document.getElementById("rock-button");
 rockButton.addEventListener('click', () => playRound(GAME_OPTIONS.ROCK));
@@ -49,6 +57,7 @@ updateScoreElements();
 //main method to run
 function playRound(humanInput) {
     const computerInput = getComputerGameInput();
+    updatePlayerDecisionElements(humanInput, computerInput);
     const roundDecision = getRoundDecision(humanInput, computerInput);
     processRoundDecision(roundDecision, humanInput, computerInput);
     updateScoreElements();
